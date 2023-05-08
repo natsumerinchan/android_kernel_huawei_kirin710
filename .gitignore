@@ -6,5 +6,5 @@ out/
 *.gz
 logs.txt
 drivers/kernelsu
-Biuld_kernel_exp.sh
+Build_kernel_exp.sh
 log-.log
