@@ -9,3 +9,8 @@ drivers/kernelsu
 Build_kernel_exp*.sh
 build_kernel_exp_*.sh
 *.log
+kernel_log-*.txt
+scripts/basic/fixdep
+scripts/kconfig/conf
+scripts/kconfig/conf.o
+scripts/kconfig/zconf.tab.o
