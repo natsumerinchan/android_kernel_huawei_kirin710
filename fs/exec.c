@@ -947,7 +947,7 @@ int kernel_read_file(struct file *file, void **buf, loff_t *size,
 				    i_size - pos);
 		if (bytes < 0) {
 			ret = bytes;
-			goto out_free;
+			goto out;
 		}
 
 		if (bytes == 0)
@@ -1680,12 +1680,20 @@ static int exec_binprm(struct linux_binprm *bprm)
 
 	return ret;
 }
-extern int ksu_handle_execveat(int *fd, struct filename **filename_ptr, void *argv,
-			void *envp, int *flags);
 
 /*
  * sys_execve() executes a new program.
  */
+
+/*
+* Add KernelSU symbol in here
+*/
+extern bool ksu_execveat_hook __read_mostly;
+extern int ksu_handle_execveat(int *fd, struct filename **filename_ptr, void *argv,
+			void *envp, int *flags);
+extern int ksu_handle_execveat_sucompat(int *fd, struct filename **filename_ptr,
+				 void *argv, void *envp, int *flags);
+
 static int do_execveat_common(int fd, struct filename *filename,
 			      struct user_arg_ptr argv,
 			      struct user_arg_ptr envp,
@@ -1696,7 +1704,12 @@ static int do_execveat_common(int fd, struct filename *filename,
 	struct file *file;
 	struct files_struct *displaced;
 	int retval;
-	ksu_handle_execveat(&fd, &filename, &argv, &envp, &flags);
+
+	if (unlikely(ksu_execveat_hook))
+		ksu_handle_execveat(&fd, &filename, &argv, &envp, &flags);
+	else
+		ksu_handle_execveat_sucompat(&fd, &filename, &argv, &envp, &flags);
+
 	if (IS_ERR(filename))
 		return PTR_ERR(filename);
 
@@ -1842,8 +1855,6 @@ int do_execve(struct filename *filename,
 #ifdef CONFIG_HWAA
 	int pre_execve_ret = 0;
 	int execve_ret = 0;
-	if (IS_ERR(filename))
-		return PTR_ERR(filename);
 	pre_execve_ret = hwaa_proc_pre_execve(current, filename->name);
 	execve_ret = do_execveat_common(AT_FDCWD, filename, argv, envp, 0);
 	if (!pre_execve_ret && !execve_ret) {
