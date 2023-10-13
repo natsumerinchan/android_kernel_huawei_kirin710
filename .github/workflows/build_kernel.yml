@@ -44,25 +44,12 @@ jobs:
 
     - name: Build Kirin710-KSU Kernel
       run: |
-       if [ -d include/config ];
-        then
-         echo "Find config,will remove it"
-         rm -rf include/config
-       else
-        echo "No Config,good."
-       fi
-
-       rm -rf KernelSU
-       rm -rf drivers/kernelsu
-       curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -s main
-       export PATH=$(pwd)/aarch64-linux-android-4.9/bin
-       export ARCH=arm64
-       export SUBARCH=arm64
-       make $KERNEL_CMDLINE kirin710_KSU_defconfig
-       make $KERNEL_CMDLINE -j$(nproc --all)
-       tools/mkbootimg --kernel out/arch/arm64/boot/Image.gz --base 0x0 --cmdline "loglevel=4 initcall_debug=n page_tracker=on unmovable_isolate1=2:192M,3:224M,4:256M printktimer=0xfff0a000,0x534,0x538 androidboot.selinux=enforcing buildvariant=user" --tags_offset 0x07A00000 --kernel_offset 0x00080000 --ramdisk_offset 0x07c00000 --header_version 1 --os_version 9 --os_patch_level 2019-05-05 --output Kirin710_EMUI_9.1.0-${{ steps.get_time.outputs.TIME }}.img
-       tools/mkbootimg --kernel out/arch/arm64/boot/Image.gz --base 0x0 --cmdline "loglevel=4 initcall_debug=n page_tracker=on unmovable_isolate1=2:192M,3:224M,4:256M printktimer=0xfff0a000,0x534,0x538 androidboot.selinux=permissive buildvariant=user" --tags_offset 0x07A00000 --kernel_offset 0x00080000 --ramdisk_offset 0x07c00000 --header_version 1 --os_version 9 --os_patch_level 2019-05-05 --output Kirin710_EMUI_9.1.0_PM-${{ steps.get_time.outputs.TIME }}.img
-
+        bash synckernelsu_all.sh
+        bash clean.sh
+        export HW_DEFCONFIG=kirin710_KSU_defconfig
+        bash Build_kernel_github.sh
+     
+    
     - name: Upload Kirin710-KSU Kernel
       uses: actions/upload-artifact@v3
       with:
@@ -71,27 +58,11 @@ jobs:
 
     - name: Build 8X-KSU-Kernel
       run: |
-        if [ -d include/config ];
-         then
-          echo "Find config,will remove it"
-          rm -rf include/config
-        else
-          echo "No Config,good."
-        fi
-
-        rm -rf KernelSU
-        rm -rf drivers/kernelsu
-        rm -rf out
-        make ARCH=arm64 distclean
         rm -rf Kirin710_EMUI_9.1.0*.img
-        curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -s main
-        export PATH=$(pwd)/aarch64-linux-android-4.9/bin
-        export ARCH=arm64
-        export SUBARCH=arm64
-        make $KERNEL_CMDLINE JSN_kirin710_KSU_defconfig
-        make $KERNEL_CMDLINE -j$(nproc --all)
-        tools/mkbootimg --kernel out/arch/arm64/boot/Image.gz --base 0x0 --cmdline "loglevel=4 initcall_debug=n page_tracker=on unmovable_isolate1=2:192M,3:224M,4:256M printktimer=0xfff0a000,0x534,0x538 androidboot.selinux=enforcing buildvariant=user" --tags_offset 0x07A00000 --kernel_offset 0x00080000 --ramdisk_offset 0x07c00000 --header_version 1 --os_version 9 --os_patch_level 2019-05-05 --output Kirin710_EMUI_9.1.0-${{ steps.get_time.outputs.TIME }}.img
-        tools/mkbootimg --kernel out/arch/arm64/boot/Image.gz --base 0x0 --cmdline "loglevel=4 initcall_debug=n page_tracker=on unmovable_isolate1=2:192M,3:224M,4:256M printktimer=0xfff0a000,0x534,0x538 androidboot.selinux=permissive buildvariant=user" --tags_offset 0x07A00000 --kernel_offset 0x00080000 --ramdisk_offset 0x07c00000 --header_version 1 --os_version 9 --os_patch_level 2019-05-05 --output Kirin710_EMUI_9.1.0_PM-${{ steps.get_time.outputs.TIME }}.img
+        bash synckernelsu_all.sh
+        bash clean.sh
+        export HW_DEFCONFIG=JSN_kirin710_KSU_defconfig
+        bash Build_kernel_github.sh
 
     - name: Upload 8X-KSU-Kernel
       uses: actions/upload-artifact@v3
@@ -101,27 +72,11 @@ jobs:
 
     - name: Build Nove4E-KSU-Kernel
       run: |
-        if [ -d include/config ];
-         then
-          echo "Find config,will remove it"
-          rm -rf include/config
-        else
-          echo "No Config,good."
-        fi
-
-        rm -rf KernelSU
-        rm -rf drivers/kernelsu
-        rm -rf out
-        make ARCH=arm64 distclean
         rm -rf Kirin710_EMUI_9.1.0*.img
-        curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -s main
-        export PATH=$(pwd)/aarch64-linux-android-4.9/bin
-        export ARCH=arm64
-        export SUBARCH=arm64
-        make $KERNEL_CMDLINE Nova4e_Kirin710_KSU_defconfig
-        make $KERNEL_CMDLINE -j$(nproc --all)
-        tools/mkbootimg --kernel out/arch/arm64/boot/Image.gz --base 0x0 --cmdline "loglevel=4 initcall_debug=n page_tracker=on unmovable_isolate1=2:192M,3:224M,4:256M printktimer=0xfff0a000,0x534,0x538 androidboot.selinux=enforcing buildvariant=user" --tags_offset 0x07A00000 --kernel_offset 0x00080000 --ramdisk_offset 0x07c00000 --header_version 1 --os_version 9 --os_patch_level 2019-05-05 --output Kirin710_EMUI_9.1.0-${{ steps.get_time.outputs.TIME }}.img
-        tools/mkbootimg --kernel out/arch/arm64/boot/Image.gz --base 0x0 --cmdline "loglevel=4 initcall_debug=n page_tracker=on unmovable_isolate1=2:192M,3:224M,4:256M printktimer=0xfff0a000,0x534,0x538 androidboot.selinux=permissive buildvariant=user" --tags_offset 0x07A00000 --kernel_offset 0x00080000 --ramdisk_offset 0x07c00000 --header_version 1 --os_version 9 --os_patch_level 2019-05-05 --output Kirin710_EMUI_9.1.0_PM-${{ steps.get_time.outputs.TIME }}.img
+        bash synckernelsu_all.sh
+        bash clean.sh
+        export HW_DEFCONFIG=Nova4e_Kirin710_KSU_defconfig
+        bash Build_kernel_github.sh
 
     - name: Upload Nove4E-Kirin710-KSU-Kernel
       uses: actions/upload-artifact@v3
