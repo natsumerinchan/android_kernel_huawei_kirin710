@@ -43,6 +43,7 @@ jobs:
 
     - name: Build Kirin710-KSU Kernel
       run: |
+      ls -l
        if [ -d include/config ];
         then
          echo "Find config,will remove it"
