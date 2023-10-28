@@ -33,7 +33,8 @@ echo "请选择一个选项："
 echo "1. 设置defconfig参数为Nova4e"
 echo "2. 设置defconfig参数为荣耀8X"
 echo "3. 设置defconfig参数为默认710配置"
-echo "请输入数字1到3"
+echo "4. 设置defconfig参数为Nova3i"
+echo "请输入数字1到4"
 
 # 读取用户输入的选项
 read choice
@@ -48,6 +49,9 @@ case $choice in
     ;;
   3)
     defconfig="kirin710_KSU_defconfig"
+    ;;
+  4)
+    defconfig="Nove3i_kirin710_KSU_defconfig"
     ;;
   *)
     echo "无效的选项"

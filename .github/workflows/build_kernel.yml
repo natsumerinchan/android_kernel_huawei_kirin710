@@ -83,3 +83,17 @@ jobs:
       with:
         name: Nove4E-Kirin710_KSU-kernel-${{ steps.get_time.outputs.TIME }}
         path: "Kirin710_EMUI_9.1.0*.img"
+
+    - name: Build Nove3i-KSU-Kernel
+      run: |
+        rm -rf Kirin710_EMUI_9.1.0*.img
+        bash synckernelsu_all.sh
+        bash clean.sh
+        export HW_DEFCONFIG=Nove3i_kirin710_KSU_defconfig
+        bash Build_kernel_github.sh
+  
+    - name: Upload Nove3i-Kirin710-KSU-Kernel
+      uses: actions/upload-artifact@v3
+      with:
+        name: Nove3i-Kirin710_KSU-kernel-${{ steps.get_time.outputs.TIME }}
+        path: "Kirin710_EMUI_9.1.0*.img"
