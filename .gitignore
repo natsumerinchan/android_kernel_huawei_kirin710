@@ -14,3 +14,4 @@ scripts/basic/fixdep
 scripts/kconfig/conf
 scripts/kconfig/conf.o
 scripts/kconfig/zconf.tab.o
+/KernelSU

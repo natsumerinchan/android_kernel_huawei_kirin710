@@ -13,7 +13,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     env:
       CCACHE_COMPILERCHECK: "%compiler% -dumpmachine; %compiler% -dumpversion"
       CCACHE_NOHASHDIR: "true"
@@ -22,7 +22,7 @@ jobs:
       KERNEL_CMDLINE: "ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- O=out"
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v6
       with:
         submodules: 'true'
         fetch-depth: 100
@@ -51,7 +51,7 @@ jobs:
      
     
     - name: Upload Kirin710-KSU Kernel
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v7
       with:
         name: Kirin710-KSU-EMUI9.1.0-kernel-${{ steps.get_time.outputs.TIME }}
         path: "Kirin710_EMUI_9.1.0*.img"
@@ -65,7 +65,7 @@ jobs:
         bash Build_kernel_github.sh
 
     - name: Upload 8X-KSU-Kernel
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v7
       with:
         name: 8X-Kirin710_KSU-kernel-${{ steps.get_time.outputs.TIME }}
         path: "Kirin710_EMUI_9.1.0*.img"
@@ -79,7 +79,7 @@ jobs:
         bash Build_kernel_github.sh
 
     - name: Upload Nove4E-Kirin710-KSU-Kernel
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v7
       with:
         name: Nove4E-Kirin710_KSU-kernel-${{ steps.get_time.outputs.TIME }}
         path: "Kirin710_EMUI_9.1.0*.img"
@@ -93,7 +93,7 @@ jobs:
         bash Build_kernel_github.sh
   
     - name: Upload Nove3i-Kirin710-KSU-Kernel
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v7
       with:
         name: Nove3i-Kirin710_KSU-kernel-${{ steps.get_time.outputs.TIME }}
         path: "Kirin710_EMUI_9.1.0*.img"
